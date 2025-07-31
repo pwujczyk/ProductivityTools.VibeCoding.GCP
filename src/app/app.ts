@@ -3,26 +3,29 @@ import { isPlatformBrowser } from '@angular/common';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { VpcListComponent } from './vpc-list';
+import { VpcDetailsComponent } from './vpc-details';
+import { VpcWizardComponent } from './vpc-wizard';
 
 const CLIENT_ID = '1088207411647-8ujqtd2jv7o8vi67hh94g0996a9aspqq.apps.googleusercontent.com'; // TODO: Replace with your OAuth2 Client ID
-const SCOPES = 'https://www.googleapis.com/auth/compute.readonly openid email profile';
+const SCOPES = 'https://www.googleapis.com/auth/compute https://www.googleapis.com/auth/cloud-platform openid email profile';
 
 @Component({
   selector: 'app-root',
-  imports: [CommonModule, FormsModule, VpcListComponent],
+  imports: [CommonModule, FormsModule, VpcListComponent, VpcDetailsComponent, VpcWizardComponent],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })
 export class App implements OnInit {
-  protected title = 'gcp-vm-list';
+  protected title = 'VibeCoding GCP Console';
   user: any = null;
   token: string | null = null;
   vms: any[] = [];
   error: string | null = null;
-  currentPage: 'vm-list' | 'vpc-list' = 'vm-list';
+  currentPage: 'vm-list' | 'vpc-list' | 'vpc-details' | 'vpc-wizard' = 'vm-list';
 
   project: string = 'firewalls-order';
   zone: string = 'us-central1-a';
+  showPermissionNotification = true; // Show by default to inform users about the permission change
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
@@ -39,6 +42,21 @@ export class App implements OnInit {
     if (existingToken) {
       this.token = existingToken;
       this.getUserInfo();
+    }
+    
+    // Check URL parameters for page routing
+    const urlParams = new URLSearchParams(window.location.search);
+    const page = urlParams.get('page');
+    if (page === 'vpc-details') {
+      this.currentPage = 'vpc-details';
+    } else if (page === 'vpc-wizard') {
+      this.currentPage = 'vpc-wizard';
+    }
+    
+    // Check if user has dismissed the notification
+    const dismissed = localStorage.getItem('permission_notification_dismissed');
+    if (dismissed) {
+      this.showPermissionNotification = false;
     }
     
     // Wait for gapi to load, then initialize
@@ -98,6 +116,12 @@ export class App implements OnInit {
     this.cdr.detectChanges();
   }
 
+  // Force re-authentication with new scopes
+  forceReauth() {
+    this.logout();
+    this.login();
+  }
+
   getUserInfo() {
     if (!this.token) return;
     fetch('https://openidconnect.googleapis.com/v1/userinfo', {
@@ -118,6 +142,16 @@ export class App implements OnInit {
     if (!this.token) return;
     try {
       const gapi = (window as any).gapi;
+      
+      // Ensure the Compute API is loaded
+      if (!gapi.client.compute) {
+        await new Promise<void>((resolve) => {
+          gapi.client.load('compute', 'v1', () => {
+            resolve();
+          });
+        });
+      }
+      
       gapi.client.setToken({ access_token: this.token });
       const resp = await gapi.client.compute.instances.list({ project: this.project, zone: this.zone });
       this.vms = resp.result.items || [];
@@ -136,6 +170,12 @@ export class App implements OnInit {
 
   navigateToVmList() {
     this.currentPage = 'vm-list';
+    this.cdr.detectChanges();
+  }
+
+  dismissPermissionNotification() {
+    this.showPermissionNotification = false;
+    localStorage.setItem('permission_notification_dismissed', 'true');
     this.cdr.detectChanges();
   }
 }

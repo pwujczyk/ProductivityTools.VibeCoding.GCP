@@ -190,8 +190,15 @@
       <button (click)="logout()" style="margin-left: 1rem;">Logout</button>
     </div>
 
+    <!-- Permission Update Notification -->
+    <div *ngIf="showPermissionNotification" style="background-color: #fff3cd; border: 1px solid #ffeaa7; color: #856404; padding: 1rem; margin-bottom: 1rem; border-radius: 4px;">
+      <strong>Permission Update Required:</strong> To create VPC networks, you need to re-authenticate with write permissions. 
+      <button (click)="forceReauth()" style="margin-left: 1rem; background-color: #007bff; color: white; border: none; padding: 0.5rem 1rem; border-radius: 4px;">Re-authenticate</button>
+      <button (click)="dismissPermissionNotification()" style="margin-left: 0.5rem; background-color: #6c757d; color: white; border: none; padding: 0.5rem 1rem; border-radius: 4px;">Dismiss</button>
+    </div>
+
     <!-- Navigation -->
-    <div style="margin-bottom: 1rem; border-bottom: 1px solid #eee; padding-bottom: 1rem;">
+    <div *ngIf="currentPage !== 'vpc-details' && currentPage !== 'vpc-wizard'" style="margin-bottom: 1rem; border-bottom: 1px solid #eee; padding-bottom: 1rem;">
       <button 
         (click)="navigateToVmList()" 
         [style.background-color]="currentPage === 'vm-list' ? '#007bff' : '#f8f9fa'"
@@ -261,6 +268,16 @@
     <!-- VPC List Page -->
     <div *ngIf="currentPage === 'vpc-list'">
       <app-vpc-list></app-vpc-list>
+    </div>
+
+    <!-- VPC Details Page -->
+    <div *ngIf="currentPage === 'vpc-details'">
+      <app-vpc-details></app-vpc-details>
+    </div>
+
+    <!-- VPC Wizard Page -->
+    <div *ngIf="currentPage === 'vpc-wizard'">
+      <app-vpc-wizard></app-vpc-wizard>
     </div>
   </div>
 </div>
