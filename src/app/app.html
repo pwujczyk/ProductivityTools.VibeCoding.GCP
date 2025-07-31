@@ -189,20 +189,78 @@
       <span *ngIf="user">Welcome, {{ user.name }} ({{ user.email }})</span>
       <button (click)="logout()" style="margin-left: 1rem;">Logout</button>
     </div>
-    <div style="margin-bottom: 1rem;">
-      <label>Project ID: <input [(ngModel)]="project" type="text"></label>
-      <label style="margin-left: 1rem;">Zone: <input [(ngModel)]="zone" type="text"></label>
-      <button (click)="listVMs()">List VMs</button>
+
+    <!-- Navigation -->
+    <div style="margin-bottom: 1rem; border-bottom: 1px solid #eee; padding-bottom: 1rem;">
+      <button 
+        (click)="navigateToVmList()" 
+        [style.background-color]="currentPage === 'vm-list' ? '#007bff' : '#f8f9fa'"
+        [style.color]="currentPage === 'vm-list' ? 'white' : 'black'"
+        style="margin-right: 0.5rem; padding: 0.5rem 1rem; border: 1px solid #ddd; border-radius: 4px; cursor: pointer;">
+        VM Instances
+      </button>
+      <button 
+        (click)="navigateToVpcList()" 
+        [style.background-color]="currentPage === 'vpc-list' ? '#007bff' : '#f8f9fa'"
+        [style.color]="currentPage === 'vpc-list' ? 'white' : 'black'"
+        style="padding: 0.5rem 1rem; border: 1px solid #ddd; border-radius: 4px; cursor: pointer;">
+        VPC Networks
+      </button>
     </div>
-    <div *ngIf="error" style="color: red;">{{ error }}</div>
-    <div *ngIf="vms.length">
-      <h3>VM Instances:</h3>
-      <ul>
-        <li *ngFor="let vm of vms">{{ vm.name }} ({{ vm.status }})</li>
-      </ul>
+
+    <!-- VM List Page -->
+    <div *ngIf="currentPage === 'vm-list'">
+      <div style="margin-bottom: 1rem;">
+        <label>Project ID: <input [(ngModel)]="project" type="text"></label>
+        <label style="margin-left: 1rem;">Zone: <input [(ngModel)]="zone" type="text"></label>
+        <button (click)="listVMs()">List VMs</button>
+      </div>
+      <div *ngIf="error" style="color: red;">{{ error }}</div>
+      <div *ngIf="vms.length">
+        <h3>VM Instances:</h3>
+        <table style="width: 100%; border-collapse: collapse; margin-top: 1rem;">
+          <thead>
+            <tr style="background-color: #f5f5f5;">
+              <th style="padding: 0.75rem; text-align: left; border: 1px solid #ddd;">Name</th>
+              <th style="padding: 0.75rem; text-align: left; border: 1px solid #ddd;">Status</th>
+              <th style="padding: 0.75rem; text-align: left; border: 1px solid #ddd;">IP Address</th>
+              <th style="padding: 0.75rem; text-align: left; border: 1px solid #ddd;">Network</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let vm of vms" style="border-bottom: 1px solid #ddd;">
+              <td style="padding: 0.75rem; border: 1px solid #ddd;">{{ vm.name }}</td>
+              <td style="padding: 0.75rem; border: 1px solid #ddd;">
+                <span [style.color]="vm.status === 'RUNNING' ? 'green' : vm.status === 'STOPPED' ? 'red' : 'orange'">
+                  {{ vm.status }}
+                </span>
+              </td>
+              <td style="padding: 0.75rem; border: 1px solid #ddd;">
+                <span *ngIf="vm.networkInterfaces && vm.networkInterfaces.length > 0">
+                  {{ vm.networkInterfaces[0].accessConfigs && vm.networkInterfaces[0].accessConfigs.length > 0 ? 
+                     vm.networkInterfaces[0].accessConfigs[0].natIP : 
+                     vm.networkInterfaces[0].networkIP || 'N/A' }}
+                </span>
+                <span *ngIf="!vm.networkInterfaces || vm.networkInterfaces.length === 0">N/A</span>
+              </td>
+              <td style="padding: 0.75rem; border: 1px solid #ddd;">
+                <span *ngIf="vm.networkInterfaces && vm.networkInterfaces.length > 0">
+                  {{ vm.networkInterfaces[0].network.split('/').pop() || 'N/A' }}
+                </span>
+                <span *ngIf="!vm.networkInterfaces || vm.networkInterfaces.length === 0">N/A</span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div *ngIf="!vms.length && !error">
+        <em>No VMs found or not yet listed.</em>
+      </div>
     </div>
-    <div *ngIf="!vms.length && !error">
-      <em>No VMs found or not yet listed.</em>
+
+    <!-- VPC List Page -->
+    <div *ngIf="currentPage === 'vpc-list'">
+      <app-vpc-list></app-vpc-list>
     </div>
   </div>
 </div>
