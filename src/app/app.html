@@ -1,293 +1,160 @@
-<!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
-<!-- * * * * * * * * * * * The content below * * * * * * * * * * * -->
-<!-- * * * * * * * * * * is only a placeholder * * * * * * * * * * -->
-<!-- * * * * * * * * * * and can be replaced.  * * * * * * * * * * -->
-<!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
-<!-- * * * * * * * * * Delete the template below * * * * * * * * * -->
-<!-- * * * * * * * to get started with your project! * * * * * * * -->
-<!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
-
-<style>
-  :host {
-    --bright-blue: oklch(51.01% 0.274 263.83);
-    --electric-violet: oklch(53.18% 0.28 296.97);
-    --french-violet: oklch(47.66% 0.246 305.88);
-    --vivid-pink: oklch(69.02% 0.277 332.77);
-    --hot-red: oklch(61.42% 0.238 15.34);
-    --orange-red: oklch(63.32% 0.24 31.68);
-
-    --gray-900: oklch(19.37% 0.006 300.98);
-    --gray-700: oklch(36.98% 0.014 302.71);
-    --gray-400: oklch(70.9% 0.015 304.04);
-
-    --red-to-pink-to-purple-vertical-gradient: linear-gradient(
-      180deg,
-      var(--orange-red) 0%,
-      var(--vivid-pink) 50%,
-      var(--electric-violet) 100%
-    );
-
-    --red-to-pink-to-purple-horizontal-gradient: linear-gradient(
-      90deg,
-      var(--orange-red) 0%,
-      var(--vivid-pink) 50%,
-      var(--electric-violet) 100%
-    );
-
-    --pill-accent: var(--bright-blue);
-
-    font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-      Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
-      "Segoe UI Symbol";
-    box-sizing: border-box;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-  }
-
-  h1 {
-    font-size: 3.125rem;
-    color: var(--gray-900);
-    font-weight: 500;
-    line-height: 100%;
-    letter-spacing: -0.125rem;
-    margin: 0;
-    font-family: "Inter Tight", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-      Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
-      "Segoe UI Symbol";
-  }
-
-  p {
-    margin: 0;
-    color: var(--gray-700);
-  }
-
-  main {
-    width: 100%;
-    min-height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 1rem;
-    box-sizing: inherit;
-    position: relative;
-  }
-
-  .angular-logo {
-    max-width: 9.2rem;
-  }
-
-  .content {
-    display: flex;
-    justify-content: space-around;
-    width: 100%;
-    max-width: 700px;
-    margin-bottom: 3rem;
-  }
-
-  .content h1 {
-    margin-top: 1.75rem;
-  }
-
-  .content p {
-    margin-top: 1.5rem;
-  }
-
-  .divider {
-    width: 1px;
-    background: var(--red-to-pink-to-purple-vertical-gradient);
-    margin-inline: 0.5rem;
-  }
-
-  .pill-group {
-    display: flex;
-    flex-direction: column;
-    align-items: start;
-    flex-wrap: wrap;
-    gap: 1.25rem;
-  }
-
-  .pill {
-    display: flex;
-    align-items: center;
-    --pill-accent: var(--bright-blue);
-    background: color-mix(in srgb, var(--pill-accent) 5%, transparent);
-    color: var(--pill-accent);
-    padding-inline: 0.75rem;
-    padding-block: 0.375rem;
-    border-radius: 2.75rem;
-    border: 0;
-    transition: background 0.3s ease;
-    font-family: var(--inter-font);
-    font-size: 0.875rem;
-    font-style: normal;
-    font-weight: 500;
-    line-height: 1.4rem;
-    letter-spacing: -0.00875rem;
-    text-decoration: none;
-  }
-
-  .pill:hover {
-    background: color-mix(in srgb, var(--pill-accent) 15%, transparent);
-  }
-
-  .pill-group .pill:nth-child(6n + 1) {
-    --pill-accent: var(--bright-blue);
-  }
-  .pill-group .pill:nth-child(6n + 2) {
-    --pill-accent: var(--french-violet);
-  }
-  .pill-group .pill:nth-child(6n + 3),
-  .pill-group .pill:nth-child(6n + 4),
-  .pill-group .pill:nth-child(6n + 5) {
-    --pill-accent: var(--hot-red);
-  }
-
-  .pill-group svg {
-    margin-inline-start: 0.25rem;
-  }
-
-  .social-links {
-    display: flex;
-    align-items: center;
-    gap: 0.73rem;
-    margin-top: 1.5rem;
-  }
-
-  .social-links path {
-    transition: fill 0.3s ease;
-    fill: var(--gray-400);
-  }
-
-  .social-links a:hover svg path {
-    fill: var(--gray-900);
-  }
-
-  @media screen and (max-width: 650px) {
-    .content {
-      flex-direction: column;
-      width: max-content;
-    }
-
-    .divider {
-      height: 1px;
-      width: 100%;
-      background: var(--red-to-pink-to-purple-horizontal-gradient);
-      margin-block: 1.5rem;
-    }
-  }
-</style>
-
-<div style="max-width: 600px; margin: 2rem auto; padding: 2rem; border: 1px solid #ccc; border-radius: 8px; background: #fff;">
-  <h1>{{ title }}</h1>
-
-  <div *ngIf="!token">
-    <button (click)="login()">Sign in with Google</button>
+<!-- Google Cloud Console Style -->
+<div style="font-family: 'Google Sans', 'Roboto', Arial, sans-serif; color: #202124; background-color: #ffffff; min-height: 100vh;">
+  <!-- Header -->
+  <div style="background-color: #f8f9fa; border-bottom: 1px solid #dadce0; padding: 0 24px; height: 64px; display: flex; align-items: center; justify-content: space-between;">
+    <div style="display: flex; align-items: center;">
+      <div style="font-size: 20px; font-weight: 500; color: #202124;">{{ title }}</div>
+    </div>
+    <div style="display: flex; align-items: center; gap: 16px;">
+      <div *ngIf="user" style="font-size: 14px; color: #5f6368;">{{ user.name }} ({{ user.email }})</div>
+      <button *ngIf="token" (click)="logout()" 
+              style="background: none; border: 1px solid #dadce0; color: #202124; padding: 8px 16px; border-radius: 4px; font-size: 14px; cursor: pointer;">
+        Logout
+      </button>
+    </div>
   </div>
 
-  <div *ngIf="token">
-    <div style="margin-bottom: 1rem;">
-      <span *ngIf="user">Welcome, {{ user.name }} ({{ user.email }})</span>
-      <button (click)="logout()" style="margin-left: 1rem;">Logout</button>
-    </div>
-
-    <!-- Permission Update Notification -->
-    <div *ngIf="showPermissionNotification" style="background-color: #fff3cd; border: 1px solid #ffeaa7; color: #856404; padding: 1rem; margin-bottom: 1rem; border-radius: 4px;">
-      <strong>Permission Update Required:</strong> To create VPC networks, you need to re-authenticate with write permissions. 
-      <button (click)="forceReauth()" style="margin-left: 1rem; background-color: #007bff; color: white; border: none; padding: 0.5rem 1rem; border-radius: 4px;">Re-authenticate</button>
-      <button (click)="dismissPermissionNotification()" style="margin-left: 0.5rem; background-color: #6c757d; color: white; border: none; padding: 0.5rem 1rem; border-radius: 4px;">Dismiss</button>
-    </div>
-
-    <!-- Navigation -->
-    <div *ngIf="currentPage !== 'vpc-details' && currentPage !== 'vpc-wizard'" style="margin-bottom: 1rem; border-bottom: 1px solid #eee; padding-bottom: 1rem;">
-      <button 
-        (click)="navigateToVmList()" 
-        [style.background-color]="currentPage === 'vm-list' ? '#007bff' : '#f8f9fa'"
-        [style.color]="currentPage === 'vm-list' ? 'white' : 'black'"
-        style="margin-right: 0.5rem; padding: 0.5rem 1rem; border: 1px solid #ddd; border-radius: 4px; cursor: pointer;">
-        VM Instances
-      </button>
-      <button 
-        (click)="navigateToVpcList()" 
-        [style.background-color]="currentPage === 'vpc-list' ? '#007bff' : '#f8f9fa'"
-        [style.color]="currentPage === 'vpc-list' ? 'white' : 'black'"
-        style="padding: 0.5rem 1rem; border: 1px solid #ddd; border-radius: 4px; cursor: pointer;">
-        VPC Networks
+  <!-- Main Content -->
+  <div style="padding: 24px; max-width: 1200px; margin: 0 auto;">
+    <!-- Login Section -->
+    <div *ngIf="!token" style="text-align: center; padding: 48px;">
+      <h1 style="margin: 0 0 24px 0; font-size: 32px; font-weight: 500; color: #202124;">Welcome to VibeCoding GCP Console</h1>
+      <p style="color: #5f6368; font-size: 16px; margin-bottom: 32px;">Sign in to manage your Google Cloud Platform resources</p>
+      <button (click)="login()" 
+              style="background-color: #1a73e8; color: white; border: none; padding: 12px 24px; border-radius: 4px; font-size: 16px; cursor: pointer; display: flex; align-items: center; margin: 0 auto;">
+        <span style="margin-right: 8px;">🔐</span> Sign in with Google
       </button>
     </div>
 
-    <!-- VM List Page -->
-    <div *ngIf="currentPage === 'vm-list'">
-      <div style="margin-bottom: 1rem;">
-        <label>Project ID: <input [(ngModel)]="project" type="text"></label>
-        <label style="margin-left: 1rem;">Zone: <input [(ngModel)]="zone" type="text"></label>
-        <button (click)="listVMs()">List VMs</button>
+    <!-- Authenticated Content -->
+    <div *ngIf="token">
+      <!-- Permission Update Notification -->
+      <div *ngIf="showPermissionNotification" 
+           style="background-color: #fff3cd; border: 1px solid #ffeaa7; color: #856404; padding: 16px; margin-bottom: 24px; border-radius: 4px; font-size: 14px;">
+        <strong>Permission Update Required:</strong> To create VPC networks, you need to re-authenticate with write permissions. 
+        <button (click)="forceReauth()" 
+                style="margin-left: 12px; background-color: #1a73e8; color: white; border: none; padding: 8px 16px; border-radius: 4px; font-size: 14px; cursor: pointer;">
+          Re-authenticate
+        </button>
+        <button (click)="dismissPermissionNotification()" 
+                style="margin-left: 8px; background-color: #6c757d; color: white; border: none; padding: 8px 16px; border-radius: 4px; font-size: 14px; cursor: pointer;">
+          Dismiss
+        </button>
       </div>
-      <div *ngIf="error" style="color: red;">{{ error }}</div>
-      <div *ngIf="vms.length">
-        <h3>VM Instances:</h3>
-        <table style="width: 100%; border-collapse: collapse; margin-top: 1rem;">
-          <thead>
-            <tr style="background-color: #f5f5f5;">
-              <th style="padding: 0.75rem; text-align: left; border: 1px solid #ddd;">Name</th>
-              <th style="padding: 0.75rem; text-align: left; border: 1px solid #ddd;">Status</th>
-              <th style="padding: 0.75rem; text-align: left; border: 1px solid #ddd;">IP Address</th>
-              <th style="padding: 0.75rem; text-align: left; border: 1px solid #ddd;">Network</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let vm of vms" style="border-bottom: 1px solid #ddd;">
-              <td style="padding: 0.75rem; border: 1px solid #ddd;">{{ vm.name }}</td>
-              <td style="padding: 0.75rem; border: 1px solid #ddd;">
-                <span [style.color]="vm.status === 'RUNNING' ? 'green' : vm.status === 'STOPPED' ? 'red' : 'orange'">
-                  {{ vm.status }}
-                </span>
-              </td>
-              <td style="padding: 0.75rem; border: 1px solid #ddd;">
-                <span *ngIf="vm.networkInterfaces && vm.networkInterfaces.length > 0">
-                  {{ vm.networkInterfaces[0].accessConfigs && vm.networkInterfaces[0].accessConfigs.length > 0 ? 
-                     vm.networkInterfaces[0].accessConfigs[0].natIP : 
-                     vm.networkInterfaces[0].networkIP || 'N/A' }}
-                </span>
-                <span *ngIf="!vm.networkInterfaces || vm.networkInterfaces.length === 0">N/A</span>
-              </td>
-              <td style="padding: 0.75rem; border: 1px solid #ddd;">
-                <span *ngIf="vm.networkInterfaces && vm.networkInterfaces.length > 0">
-                  {{ vm.networkInterfaces[0].network.split('/').pop() || 'N/A' }}
-                </span>
-                <span *ngIf="!vm.networkInterfaces || vm.networkInterfaces.length === 0">N/A</span>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+
+      <!-- Navigation -->
+      <div *ngIf="currentPage !== 'vpc-details' && currentPage !== 'vpc-wizard'" 
+           style="margin-bottom: 24px; border-bottom: 1px solid #dadce0; padding-bottom: 16px;">
+        <div style="display: flex; gap: 8px;">
+          <button 
+            (click)="navigateToVmList()" 
+            [style.background-color]="currentPage === 'vm-list' ? '#1a73e8' : '#ffffff'"
+            [style.color]="currentPage === 'vm-list' ? 'white' : '#202124'"
+            [style.border-color]="currentPage === 'vm-list' ? '#1a73e8' : '#dadce0'"
+            style="padding: 8px 16px; border: 1px solid; border-radius: 4px; cursor: pointer; font-size: 14px; font-weight: 500;">
+            VM Instances
+          </button>
+          <button 
+            (click)="navigateToVpcList()" 
+            [style.background-color]="currentPage === 'vpc-list' ? '#1a73e8' : '#ffffff'"
+            [style.color]="currentPage === 'vpc-list' ? 'white' : '#202124'"
+            [style.border-color]="currentPage === 'vpc-list' ? '#1a73e8' : '#dadce0'"
+            style="padding: 8px 16px; border: 1px solid; border-radius: 4px; cursor: pointer; font-size: 14px; font-weight: 500;">
+            VPC Networks
+          </button>
+        </div>
       </div>
-      <div *ngIf="!vms.length && !error">
-        <em>No VMs found or not yet listed.</em>
+
+      <!-- VM List Page -->
+      <div *ngIf="currentPage === 'vm-list'">
+        <div style="background-color: #ffffff; border: 1px solid #dadce0; border-radius: 8px; padding: 24px; margin-bottom: 24px;">
+          <h3 style="margin: 0 0 20px 0; font-size: 18px; font-weight: 500; color: #202124;">VM Instance Management</h3>
+          
+          <div style="display: grid; grid-template-columns: 1fr auto; gap: 16px; margin-bottom: 20px; align-items: end;">
+            <div>
+              <label style="display: block; margin-bottom: 8px; font-size: 14px; font-weight: 500; color: #202124;">Project ID</label>
+              <input [(ngModel)]="project" type="text" 
+                     style="width: 100%; padding: 12px; border: 1px solid #dadce0; border-radius: 4px; font-size: 14px; box-sizing: border-box;">
+            </div>
+            <div>
+              <button (click)="listVMs()" 
+                      style="background-color: #1a73e8; color: white; border: none; padding: 12px 24px; border-radius: 4px; font-size: 14px; cursor: pointer;">
+                List VMs from All Zones
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div *ngIf="error" 
+             style="background-color: #fce8e6; border: 1px solid #f28b82; color: #c5221f; padding: 12px 16px; border-radius: 4px; margin-bottom: 24px; font-size: 14px;">
+          {{ error }}
+        </div>
+
+        <div *ngIf="vms.length" style="background-color: #ffffff; border: 1px solid #dadce0; border-radius: 8px; overflow: hidden;">
+          <div style="padding: 20px; border-bottom: 1px solid #dadce0; background-color: #f8f9fa;">
+            <h3 style="margin: 0; font-size: 16px; font-weight: 500; color: #202124;">VM Instances ({{ vms.length }})</h3>
+          </div>
+          <div style="overflow-x: auto;">
+            <table style="width: 100%; border-collapse: collapse;">
+              <thead>
+                <tr style="background-color: #f8f9fa;">
+                  <th style="padding: 12px 16px; text-align: left; border-bottom: 1px solid #dadce0; font-size: 14px; font-weight: 500; color: #202124;">Name</th>
+                  <th style="padding: 12px 16px; text-align: left; border-bottom: 1px solid #dadce0; font-size: 14px; font-weight: 500; color: #202124;">Status</th>
+                  <th style="padding: 12px 16px; text-align: left; border-bottom: 1px solid #dadce0; font-size: 14px; font-weight: 500; color: #202124;">IP Address</th>
+                  <th style="padding: 12px 16px; text-align: left; border-bottom: 1px solid #dadce0; font-size: 14px; font-weight: 500; color: #202124;">Network</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let vm of vms" style="border-bottom: 1px solid #dadce0;">
+                  <td style="padding: 12px 16px; font-size: 14px; color: #202124;">{{ vm.name }}</td>
+                  <td style="padding: 12px 16px; font-size: 14px;">
+                    <span [style.color]="vm.status === 'RUNNING' ? '#34a853' : vm.status === 'STOPPED' ? '#ea4335' : '#fbbc04'"
+                          style="font-weight: 500;">
+                      {{ vm.status }}
+                    </span>
+                  </td>
+                  <td style="padding: 12px 16px; font-size: 14px; color: #202124;">
+                    <span *ngIf="vm.networkInterfaces && vm.networkInterfaces.length > 0">
+                      {{ vm.networkInterfaces[0].accessConfigs && vm.networkInterfaces[0].accessConfigs.length > 0 ? 
+                         vm.networkInterfaces[0].accessConfigs[0].natIP : 
+                         vm.networkInterfaces[0].networkIP || 'N/A' }}
+                    </span>
+                    <span *ngIf="!vm.networkInterfaces || vm.networkInterfaces.length === 0">N/A</span>
+                  </td>
+                  <td style="padding: 12px 16px; font-size: 14px; color: #202124;">
+                    <span *ngIf="vm.networkInterfaces && vm.networkInterfaces.length > 0">
+                      {{ vm.networkInterfaces[0].network.split('/').pop() || 'N/A' }}
+                    </span>
+                    <span *ngIf="!vm.networkInterfaces || vm.networkInterfaces.length === 0">N/A</span>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div *ngIf="!vms.length && !error" 
+             style="background-color: #ffffff; border: 1px solid #dadce0; border-radius: 8px; padding: 48px; text-align: center;">
+          <p style="color: #5f6368; font-size: 14px; margin: 0;">No VMs found or not yet listed.</p>
+        </div>
       </div>
-    </div>
 
-    <!-- VPC List Page -->
-    <div *ngIf="currentPage === 'vpc-list'">
-      <app-vpc-list></app-vpc-list>
-    </div>
+      <!-- VPC List Page -->
+      <div *ngIf="currentPage === 'vpc-list'">
+        <app-vpc-list></app-vpc-list>
+      </div>
 
-    <!-- VPC Details Page -->
-    <div *ngIf="currentPage === 'vpc-details'">
-      <app-vpc-details></app-vpc-details>
-    </div>
+      <!-- VPC Details Page -->
+      <div *ngIf="currentPage === 'vpc-details'">
+        <app-vpc-details></app-vpc-details>
+      </div>
 
-    <!-- VPC Wizard Page -->
-    <div *ngIf="currentPage === 'vpc-wizard'">
-      <app-vpc-wizard></app-vpc-wizard>
+      <!-- VPC Wizard Page -->
+      <div *ngIf="currentPage === 'vpc-wizard'">
+        <app-vpc-wizard></app-vpc-wizard>
+      </div>
     </div>
   </div>
 </div>
-
-<!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
-<!-- * * * * * * * * * * * The content above * * * * * * * * * * * * -->
-<!-- * * * * * * * * * * is only a placeholder * * * * * * * * * * * -->
-<!-- * * * * * * * * * * and can be replaced.  * * * * * * * * * * * -->
-<!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
-<!-- * * * * * * * * * * End of Placeholder  * * * * * * * * * * * * -->
-<!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
 
 

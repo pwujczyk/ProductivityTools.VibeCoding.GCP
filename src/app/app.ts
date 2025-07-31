@@ -24,7 +24,6 @@ export class App implements OnInit {
   currentPage: 'vm-list' | 'vpc-list' | 'vpc-details' | 'vpc-wizard' = 'vm-list';
 
   project: string = 'firewalls-order';
-  zone: string = 'us-central1-a';
   showPermissionNotification = true; // Show by default to inform users about the permission change
 
   constructor(
@@ -61,13 +60,11 @@ export class App implements OnInit {
     
     // Wait for gapi to load, then initialize
     (window as any).onGapiLoad = () => {
-      (window as any).gapi.load('client', () => {
-        (window as any).gapi.client.init({
-          apiKey: '', // Not needed for OAuth2
-          discoveryDocs: [
-            'https://www.googleapis.com/discovery/v1/apis/compute/v1/rest'
-          ]
-        });
+      (window as any).gapi.client.init({
+        apiKey: '', // Not needed for OAuth2
+        discoveryDocs: [
+          'https://www.googleapis.com/discovery/v1/apis/compute/v1/rest'
+        ]
       });
     };
     // If gapi is already loaded
@@ -140,6 +137,16 @@ export class App implements OnInit {
 
   async listVMs() {
     if (!this.token) return;
+    
+    if (!this.project || this.project.trim() === '') {
+      this.error = 'Please enter a valid Project ID.';
+      return;
+    }
+
+    this.error = null;
+    this.vms = []; // Clear existing data
+    this.cdr.detectChanges();
+
     try {
       const gapi = (window as any).gapi;
       
@@ -153,12 +160,46 @@ export class App implements OnInit {
       }
       
       gapi.client.setToken({ access_token: this.token });
-      const resp = await gapi.client.compute.instances.list({ project: this.project, zone: this.zone });
-      this.vms = resp.result.items || [];
-      this.error = null;
+      
+      // Use aggregatedList to get VMs from all zones
+      const resp = await gapi.client.compute.instances.aggregatedList({ 
+        project: this.project.trim() 
+      });
+      
+      // Process the aggregated response to extract all VMs
+      const allVMs: any[] = [];
+      if (resp.result.items) {
+        for (const zoneName in resp.result.items) {
+          const zoneData = resp.result.items[zoneName];
+          if (zoneData.instances && Array.isArray(zoneData.instances)) {
+            allVMs.push(...zoneData.instances);
+          }
+        }
+      }
+      
+      this.vms = allVMs;
+      
+      // If no VMs found, show appropriate message
+      if (this.vms.length === 0) {
+        this.error = null; // Clear any previous errors
+      }
+      
       this.cdr.detectChanges();
+      
     } catch (err: any) {
-      this.error = 'Failed to fetch VMs: ' + (err.message || err);
+      console.error('Error fetching VMs:', err);
+      
+      // Improved error handling
+      if (err.status === 403) {
+        this.error = 'Access denied. Please check your permissions for this project.';
+      } else if (err.status === 404) {
+        this.error = 'Project not found. Please check the Project ID.';
+      } else if (err.message) {
+        this.error = 'Failed to fetch VMs: ' + err.message;
+      } else {
+        this.error = 'Failed to fetch VMs. Please try again.';
+      }
+      
       this.cdr.detectChanges();
     }
   }

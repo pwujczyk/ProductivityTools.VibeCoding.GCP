@@ -7,57 +7,148 @@ import { FormsModule } from '@angular/forms';
   selector: 'app-vpc-list',
   imports: [CommonModule, FormsModule],
   template: `
-    <div>
-      <div style="margin-bottom: 1rem;">
-        <label>Project ID: <input [(ngModel)]="project" type="text"></label>
-        <button (click)="listVPCs()" style="margin-left: 1rem;">List VPCs</button>
-        <button (click)="createNewVpc()" style="margin-left: 1rem; background-color: #28a745; color: white; border: none; padding: 0.5rem 1rem; border-radius: 4px;">+ Create VPC</button>
+    <div style="font-family: 'Google Sans', 'Roboto', Arial, sans-serif; color: #202124;">
+      <!-- Header Section -->
+      <div style="background-color: #ffffff; border: 1px solid #dadce0; border-radius: 8px; padding: 24px; margin-bottom: 24px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+          <h3 style="margin: 0; font-size: 18px; font-weight: 500; color: #202124;">VPC Network Management</h3>
+          <button (click)="createNewVpc()" 
+                  style="background-color: #1a73e8; color: white; border: none; padding: 8px 16px; border-radius: 4px; font-size: 14px; cursor: pointer; display: flex; align-items: center;">
+            <span style="margin-right: 8px;">+</span> Create VPC
+          </button>
+        </div>
+        
+        <div style="display: grid; grid-template-columns: 1fr auto; gap: 16px; align-items: end;">
+          <div>
+            <label style="display: block; margin-bottom: 8px; font-size: 14px; font-weight: 500; color: #202124;">Project ID</label>
+            <input [(ngModel)]="project" type="text" 
+                   style="width: 100%; padding: 12px; border: 1px solid #dadce0; border-radius: 4px; font-size: 14px; box-sizing: border-box;">
+          </div>
+          <button (click)="listVPCs()" 
+                  style="background-color: #1a73e8; color: white; border: none; padding: 12px 24px; border-radius: 4px; font-size: 14px; cursor: pointer;">
+            List VPCs
+          </button>
+        </div>
       </div>
 
-      <div *ngIf="error" style="color: red;">{{ error }}</div>
-
-      <div *ngIf="vpcs.length">
-        <h3>VPC Networks:</h3>
-        <table style="width: 100%; border-collapse: collapse; margin-top: 1rem;">
-          <thead>
-            <tr style="background-color: #f5f5f5;">
-              <th style="padding: 0.75rem; text-align: left; border: 1px solid #ddd;">Name</th>
-              <th style="padding: 0.75rem; text-align: left; border: 1px solid #ddd;">Auto Create Subnets</th>
-              <th style="padding: 0.75rem; text-align: left; border: 1px solid #ddd;">Routing Mode</th>
-              <th style="padding: 0.75rem; text-align: left; border: 1px solid #ddd;">Subnetworks</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let vpc of vpcs" style="border-bottom: 1px solid #ddd;">
-              <td style="padding: 0.75rem; border: 1px solid #ddd;">
-                <a 
-                  href="#" 
-                  (click)="viewVpcDetails(vpc.name, $event)"
-                  style="color: #007bff; text-decoration: none; font-weight: bold;"
-                  onmouseover="this.style.textDecoration='underline'"
-                  onmouseout="this.style.textDecoration='none'">
-                  {{ vpc.name }}
-                </a>
-              </td>
-              <td style="padding: 0.75rem; border: 1px solid #ddd;">
-                <span [style.color]="vpc.autoCreateSubnetworks ? 'green' : 'red'">
-                  {{ vpc.autoCreateSubnetworks ? 'Yes' : 'No' }}
-                </span>
-              </td>
-              <td style="padding: 0.75rem; border: 1px solid #ddd;">{{ vpc.routingConfig?.routingMode || 'REGIONAL' }}</td>
-              <td style="padding: 0.75rem; border: 1px solid #ddd;">
-                <span *ngIf="vpc.subnetworks && vpc.subnetworks.length > 0">
-                  {{ vpc.subnetworks.length }} subnet(s)
-                </span>
-                <span *ngIf="!vpc.subnetworks || vpc.subnetworks.length === 0">0 subnets</span>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+      <!-- Error Message -->
+      <div *ngIf="error" 
+           style="background-color: #fce8e6; border: 1px solid #f28b82; color: #c5221f; padding: 12px 16px; border-radius: 4px; margin-bottom: 24px; font-size: 14px;">
+        {{ error }}
       </div>
 
-      <div *ngIf="!vpcs.length && !error">
-        <em>No VPCs found or not yet listed.</em>
+      <!-- VPC Networks Table -->
+      <div *ngIf="vpcs.length" style="background-color: #ffffff; border: 1px solid #dadce0; border-radius: 8px; overflow: hidden;">
+        <!-- Filter Bar -->
+        <div style="padding: 16px 20px; border-bottom: 1px solid #dadce0; background-color: #f8f9fa; display: flex; align-items: center; gap: 12px;">
+          <div style="display: flex; align-items: center; gap: 8px; flex: 1;">
+            <span style="color: #5f6368; font-size: 16px;">🔍</span>
+            <input type="text" placeholder="Enter property name or value" 
+                   style="border: 1px solid #dadce0; border-radius: 4px; padding: 8px 12px; font-size: 14px; flex: 1; background-color: #ffffff;">
+          </div>
+          <button style="background: none; border: 1px solid #dadce0; color: #202124; padding: 8px 12px; border-radius: 4px; font-size: 14px; cursor: pointer;">
+            Manage flow logs
+          </button>
+        </div>
+
+        <!-- Table Header -->
+        <div style="padding: 12px 20px; border-bottom: 1px solid #dadce0; background-color: #f8f9fa;">
+          <div style="display: flex; align-items: center; gap: 12px;">
+            <input type="checkbox" style="width: 16px; height: 16px;">
+            <span style="font-size: 14px; font-weight: 500; color: #202124;">VPC Networks ({{ vpcs.length }})</span>
+          </div>
+        </div>
+
+        <!-- Table -->
+        <div style="overflow-x: auto;">
+          <table style="width: 100%; border-collapse: collapse;">
+            <thead>
+              <tr style="background-color: #f8f9fa;">
+                <th style="padding: 12px 16px; text-align: left; border-bottom: 1px solid #dadce0; font-size: 14px; font-weight: 500; color: #202124; width: 40px;">
+                  <input type="checkbox" style="width: 16px; height: 16px;">
+                </th>
+                <th style="padding: 12px 16px; text-align: left; border-bottom: 1px solid #dadce0; font-size: 14px; font-weight: 500; color: #202124;">
+                  Name ↕
+                </th>
+                <th style="padding: 12px 16px; text-align: left; border-bottom: 1px solid #dadce0; font-size: 14px; font-weight: 500; color: #202124;">
+                  Subnets
+                </th>
+                <th style="padding: 12px 16px; text-align: left; border-bottom: 1px solid #dadce0; font-size: 14px; font-weight: 500; color: #202124;">
+                  MTU ⓘ
+                </th>
+                <th style="padding: 12px 16px; text-align: left; border-bottom: 1px solid #dadce0; font-size: 14px; font-weight: 500; color: #202124;">
+                  Mode
+                </th>
+                <th style="padding: 12px 16px; text-align: left; border-bottom: 1px solid #dadce0; font-size: 14px; font-weight: 500; color: #202124;">
+                  IPv6 ULA range
+                </th>
+                <th style="padding: 12px 16px; text-align: left; border-bottom: 1px solid #dadce0; font-size: 14px; font-weight: 500; color: #202124;">
+                  Gateways
+                </th>
+                <th style="padding: 12px 16px; text-align: left; border-bottom: 1px solid #dadce0; font-size: 14px; font-weight: 500; color: #202124;">
+                  Flow log configs ⓘ
+                </th>
+                <th style="padding: 12px 16px; text-align: left; border-bottom: 1px solid #dadce0; font-size: 14px; font-weight: 500; color: #202124;">
+                  Firewall rules
+                </th>
+                <th style="padding: 12px 16px; text-align: left; border-bottom: 1px solid #dadce0; font-size: 14px; font-weight: 500; color: #202124;">
+                  Global dynamic routing ⓘ
+                </th>
+                <th style="padding: 12px 16px; text-align: left; border-bottom: 1px solid #dadce0; font-size: 14px; font-weight: 500; color: #202124;">
+                  Network profile
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let vpc of vpcs" style="border-bottom: 1px solid #dadce0;">
+                <td style="padding: 12px 16px; text-align: center;">
+                  <input type="checkbox" style="width: 16px; height: 16px;">
+                </td>
+                <td style="padding: 12px 16px; font-size: 14px; color: #202124;">
+                  <a 
+                    href="#" 
+                    (click)="viewVpcDetails(vpc.name, $event)"
+                    style="color: #1a73e8; text-decoration: none; font-weight: 500;">
+                    {{ vpc.name }}
+                  </a>
+                </td>
+                <td style="padding: 12px 16px; font-size: 14px; color: #202124; text-align: center;">
+                  {{ vpc.subnetworks ? vpc.subnetworks.length : 0 }}
+                </td>
+                <td style="padding: 12px 16px; font-size: 14px; color: #202124; text-align: center;">
+                  1460
+                </td>
+                <td style="padding: 12px 16px; font-size: 14px; color: #202124;">
+                  {{ vpc.autoCreateSubnetworks ? 'Auto' : 'Custom' }}
+                </td>
+                <td style="padding: 12px 16px; font-size: 14px; color: #202124;">
+                  —
+                </td>
+                <td style="padding: 12px 16px; font-size: 14px; color: #202124;">
+                  —
+                </td>
+                <td style="padding: 12px 16px; font-size: 14px; color: #202124;">
+                  —
+                </td>
+                <td style="padding: 12px 16px; font-size: 14px; color: #202124; text-align: center;">
+                  {{ vpc.firewallRules ? vpc.firewallRules.length : 0 }}
+                </td>
+                <td style="padding: 12px 16px; font-size: 14px; color: #202124;">
+                  Off
+                </td>
+                <td style="padding: 12px 16px; font-size: 14px; color: #202124;">
+                  —
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Empty State -->
+      <div *ngIf="!vpcs.length && !error" 
+           style="background-color: #ffffff; border: 1px solid #dadce0; border-radius: 8px; padding: 48px; text-align: center;">
+        <p style="color: #5f6368; font-size: 14px; margin: 0;">No VPCs found or not yet listed.</p>
       </div>
     </div>
   `,
@@ -104,6 +195,15 @@ export class VpcListComponent implements OnInit {
       return;
     }
 
+    if (!this.project || this.project.trim() === '') {
+      this.error = 'Please enter a valid Project ID.';
+      return;
+    }
+
+    this.error = null;
+    this.vpcs = []; // Clear existing data
+    this.cdr.detectChanges();
+
     try {
       const gapi = (window as any).gapi;
       
@@ -117,12 +217,35 @@ export class VpcListComponent implements OnInit {
       }
       
       gapi.client.setToken({ access_token: token });
-      const resp = await gapi.client.compute.networks.list({ project: this.project });
+      
+      // List all VPC networks in the project (global resources, no zone needed)
+      const resp = await gapi.client.compute.networks.list({ 
+        project: this.project.trim() 
+      });
+      
       this.vpcs = resp.result.items || [];
-      this.error = null;
+      
+      // If no VPCs found, show appropriate message
+      if (this.vpcs.length === 0) {
+        this.error = null; // Clear any previous errors
+      }
+      
       this.cdr.detectChanges();
+      
     } catch (err: any) {
-      this.error = 'Failed to fetch VPCs: ' + (err.message || err);
+      console.error('Error fetching VPCs:', err);
+      
+      // Improved error handling
+      if (err.status === 403) {
+        this.error = 'Access denied. Please check your permissions for this project.';
+      } else if (err.status === 404) {
+        this.error = 'Project not found. Please check the Project ID.';
+      } else if (err.message) {
+        this.error = 'Failed to fetch VPCs: ' + err.message;
+      } else {
+        this.error = 'Failed to fetch VPCs. Please try again.';
+      }
+      
       this.cdr.detectChanges();
     }
   }
